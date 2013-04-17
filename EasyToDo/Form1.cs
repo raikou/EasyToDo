@@ -12,6 +12,7 @@ using System.Windows;
 using System.Xml;
 
 //master + dev//master + testnamespace EasyToDo
+//test
 
 namespace EasyToDo
 {
@@ -577,6 +578,10 @@ namespace EasyToDo
 				}
 				temp.name = sstr[4];
 				temp.memo = sstr[5];
+				for(int i=6; i < sstr.Length; i++ ){
+					temp.memo += ",";
+					temp.memo += sstr[ i ];
+				}
 
 				temp.memo = temp.memo.Replace("<br>", Environment.NewLine );
 
