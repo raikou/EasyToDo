@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 using System.IO;
-using System.Windows;
-using System.Xml;
 
 //master + dev//master + testnamespace EasyToDo
 //test
@@ -34,6 +29,7 @@ namespace EasyToDo
 		Datas data = new Datas();
 		Flags flags = new Flags();
 		useXML uXml = new useXML();
+		
 
 		/// <summary>
 		/// 初期化

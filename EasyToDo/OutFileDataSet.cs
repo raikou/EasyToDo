@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.Windows.Forms;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 
 namespace EasyToDo
 {
@@ -22,6 +18,8 @@ namespace EasyToDo
 		{
 			MessageBox.Show(file_name.ToString() + "に保存しました。");
 			Process.Start( file_name.ToString() );
+
+
 		}
 
 		/// <summary>
