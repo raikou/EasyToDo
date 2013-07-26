@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EasyToDo
 {
+	/// <summary>
+	/// ToDoの詳細を書き込むダイアログ
+	/// </summary>
 	public partial class Form2 : Form
 	{
+#pragma warning disable 1591
 		public string date, name, memo;
 		public string check=""; // 期限を一時的に保存する物
 		public bool status = false; //true:OK false:キャンセル
@@ -27,6 +25,7 @@ namespace EasyToDo
 			this.date = date;
 
 		}
+#pragma warning restore 1591
 
 		private void Form2_Load(object sender, EventArgs e)
 		{
@@ -70,9 +69,9 @@ namespace EasyToDo
 
 		private void OK_Button_Click(object sender, EventArgs e)
 		{
-			this.save();
+			this.Save();
 		}
-		private void save()
+		private void Save()
 		{
 			this.status = true;
 			this.name = this.textBox1.Text;
@@ -125,13 +124,13 @@ namespace EasyToDo
 
 		private void dateTimePicker1_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			this.save();
+			this.Save();
 		}
 
 		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if( e.KeyChar == (char)Keys.Return ){
-				this.save();
+				this.Save();
 			}
 		}
 

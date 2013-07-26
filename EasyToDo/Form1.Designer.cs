@@ -124,7 +124,7 @@
 			this.全データ内容込ToolStripMenuItem.Name = "全データ内容込ToolStripMenuItem";
 			this.全データ内容込ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
 			this.全データ内容込ToolStripMenuItem.Text = "表示データ（内容込）";
-			this.全データ内容込ToolStripMenuItem.Click += new System.EventHandler(this.全データ内容込ToolStripMenuItem_Click);
+			this.全データ内容込ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click_DataRead);
 			// 
 			// listView1
 			// 
