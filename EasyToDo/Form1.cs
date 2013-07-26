@@ -4,14 +4,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms;
-
-using DecorateDisplayColor;
-
 using System.IO;
+using System.Windows.Forms;
 
 namespace EasyToDo
 {
+
 
 	/// <summary>
 	/// メイン画面
@@ -70,60 +68,18 @@ namespace EasyToDo
 					int itemNum = listView1.Items.Count - 1;
 					//int item_num = data.same_data(listView1.Items[i].SubItems[1].Text, listView1.Items[i].SubItems[0].Text);
 
-					Color foreColor = DecorateColor.Finish.ForeColor;
-
 					//色設定
-					switch (_data.data[i].nowStatus)
+					if (_data.data[i].nowStatus == DecorateColor.Date.ColorFlag)
 					{
-						case ColorFlag.Finish:
-							//return "無期限";
-							listView1.Items[itemNum].BackColor = Color.White;
-							listView1.Items[itemNum].ForeColor = Color.Gray;
-							break;
-						case ColorFlag.Date:
-							//日付カラー
-							if (DateTime.Today.Date >= this._data.data[i].limitDate.Date)
-							{
-								listView1.Items[itemNum].BackColor = Color.Red;
-								listView1.Items[itemNum].ForeColor = Color.White;
-							}
-							else if (DateTime.Today.AddDays(3).Date >= this._data.data[i].limitDate.Date)
-							{
-								listView1.Items[itemNum].BackColor = Color.Orange;
-								listView1.Items[itemNum].ForeColor = Color.Black;
-							}
-							else
-							{
-								listView1.Items[itemNum].BackColor = Color.White;
-								listView1.Items[itemNum].ForeColor = Color.Black;
-							}
-							break;
-						case ColorFlag.Unlimited:
-							//return "無期限";
-							listView1.Items[itemNum].BackColor = Color.White;
-							listView1.Items[itemNum].ForeColor = Color.Blue;
-							break;
-						case ColorFlag.Memo1:
-							//return "メモ１";
-							listView1.Items[itemNum].BackColor = Color.Aquamarine;
-							listView1.Items[itemNum].ForeColor = Color.Black;
-							break;
-						case ColorFlag.Memo2:
-							//return "メモ２";
-							listView1.Items[itemNum].BackColor = Color.GreenYellow;
-							listView1.Items[itemNum].ForeColor = Color.Black;
-							break;
-						case ColorFlag.Memo3:
-							//return "メモ３";
-							listView1.Items[itemNum].BackColor = Color.LightGreen;
-							listView1.Items[itemNum].ForeColor = Color.Black;
-							break;
-						case ColorFlag.Emergency:
-							//return "緊急";
-							listView1.Items[itemNum].BackColor = Color.White;
-							listView1.Items[itemNum].ForeColor = Color.Red;
-							break;
+						listView1.Items[itemNum].BackColor = DecorateColor.Date.ForeColor(this._data.data[i].limitDate.Date);
+						listView1.Items[itemNum].ForeColor = DecorateColor.Date.BackColor(this._data.data[i].limitDate.Date);
 					}
+					else
+					{
+						listView1.Items[itemNum].BackColor = DecorateColor.ForeColor(this._data.data[i].nowStatus);
+						listView1.Items[itemNum].ForeColor = DecorateColor.ForeColor(this._data.data[i].nowStatus);
+					}
+					
 				}
 			}
 			catch (Exception e)
@@ -213,7 +169,7 @@ namespace EasyToDo
 				//data.add( form2.name, form2.memo, data.data[0].status( form2.date ) );
 				_data.Add(form2.name, form2.memo, tD.Status(form2.date));
 				int num = _data.data.Count - 1;
-				if (_data.data[num].nowStatus == ColorFlag.Date) _data.data[num].SetStatus(form2.date);
+				if (_data.data[num].nowStatus == DecorateColor.ColorFlag.Date) _data.data[num].SetStatus(form2.date);
 
 				//画面へ描画
 				_data.MySort();
@@ -383,11 +339,9 @@ namespace EasyToDo
 	public class Data
 	{
 		//構造情報
-#pragma warning disable 1591
-		public ColorFlag nowStatus;
+		public DecorateColor.ColorFlag nowStatus;
 		public DateTime limitDate, createDate, exitDate;
 		public string name, memo;
-#pragma warning restore 1591
 
 
 		/// <summary>
@@ -403,30 +357,31 @@ namespace EasyToDo
 		/// <returns>期限の文字列</returns>
 		public string GetStatusTextForDisp()
 		{
-			switch (nowStatus)
-			{
-				case ColorFlag.Finish:
-					return "完了";
-				case ColorFlag.Date:
-					//　月/日　を返すように変更
-					string str = "";
-					str += this.limitDate.Month + "/" + this.limitDate.Day;
-					return str;
-				//return this.limitDate.ToShortDateString();
-				case ColorFlag.Unlimited:
-					return "無期限";
-				case ColorFlag.Memo1:
-					return "メモ１";
-				case ColorFlag.Memo2:
-					return "メモ２";
-				case ColorFlag.Memo3:
-					return "メモ３";
-				case ColorFlag.Emergency:
-					return "緊急";
-				default:
-					MessageBox.Show(" getStatus においてエラーが発生しました。 ");
-					return "";
-			}
+			return DecorateColor.Text(nowStatus);
+			//switch (nowStatus)
+			//{
+			//	case DecorateColor.ColorFlag.Finish:
+			//		return "完了";
+			//	case DecorateColor.ColorFlag.Date:
+			//		//　月/日　を返すように変更
+			//		string str = "";
+			//		str += this.limitDate.Month + "/" + this.limitDate.Day;
+			//		return str;
+			//	//return this.limitDate.ToShortDateString();
+			//	case ColorFlag.Unlimited:
+			//		return "無期限";
+			//	case ColorFlag.Memo1:
+			//		return "メモ１";
+			//	case ColorFlag.Memo2:
+			//		return "メモ２";
+			//	case ColorFlag.Memo3:
+			//		return "メモ３";
+			//	case ColorFlag.Emergency:
+			//		return "緊急";
+			//	default:
+			//		MessageBox.Show(" getStatus においてエラーが発生しました。 ");
+			//		return "";
+			//}
 		}
 
 		/// <summary>
@@ -436,8 +391,8 @@ namespace EasyToDo
 		/// <param name="statusString">日付または定めた文字列</param>
 		public void SetStatus(string statusString)
 		{
-			nowStatus = this.Status(statusString);
-			if (nowStatus == ColorFlag.Date)
+			nowStatus = this.Status( statusString);
+			if ( nowStatus == DecorateColor.Date.ColorFlag)
 			{
 				limitDate = DateTime.Parse(statusString);
 			}
@@ -448,39 +403,40 @@ namespace EasyToDo
 		/// </summary>
 		/// <param name="statusString"></param>
 		/// <returns></returns>
-		public ColorFlag Status(string statusString)
+		public DecorateColor.ColorFlag Status(string statusString)
 		{
-			ColorFlag now;
-			if (statusString == "緊急")
-			{
-				now = ColorFlag.Emergency;
-			}
-			else if (statusString == "メモ１")
-			{
-				now = ColorFlag.Memo1;
-			}
-			else if (statusString == "メモ２")
-			{
-				now = ColorFlag.Memo2;
-			}
-			else if (statusString == "メモ３")
-			{
-				now = ColorFlag.Memo3;
-			}
-			else if (statusString == "無期限")
-			{
-				now = ColorFlag.Unlimited;
-			}
-			else if (statusString == "完了")
-			{
-				now = ColorFlag.Finish;
-			}
-			else
-			{
-				//例外データが来たときの処理を核必要あり：正規表現
-				now = ColorFlag.Date;
-			}
-			return now;
+			return DecorateColor.getColorFlag( (DecorateColor.ColorFlag) int.Parse(statusString)) == DecorateColor.ColorFlag.Date ? statusString:DecorateColor.getColorFlag( (DecorateColor.ColorFlag) int.Parse(statusString));
+			//ColorFlag now;
+			//if (statusString == "緊急")
+			//{
+			//	now = ColorFlag.Emergency;
+			//}
+			//else if (statusString == "メモ１")
+			//{
+			//	now = ColorFlag.Memo1;
+			//}
+			//else if (statusString == "メモ２")
+			//{
+			//	now = ColorFlag.Memo2;
+			//}
+			//else if (statusString == "メモ３")
+			//{
+			//	now = ColorFlag.Memo3;
+			//}
+			//else if (statusString == "無期限")
+			//{
+			//	now = ColorFlag.Unlimited;
+			//}
+			//else if (statusString == "完了")
+			//{
+			//	now = ColorFlag.Finish;
+			//}
+			//else
+			//{
+			//	//例外データが来たときの処理を核必要あり：正規表現
+			//	now = ColorFlag.Date;
+			//}
+			//return now;
 		}
 	}
 	/// <summary>
@@ -508,7 +464,7 @@ namespace EasyToDo
 		/// <param name="name">やること</param>
 		/// <param name="memo">メモ</param>
 		/// <param name="nowStatus">期限の状態</param>
-		public void Add(string name, string memo, ColorFlag nowStatus)
+		public void Add(string name, string memo, DecorateColor.ColorFlag nowStatus)
 		{
 			Data temp = new Data
 				{
@@ -570,39 +526,41 @@ namespace EasyToDo
 						limitDate = DateTime.Parse(sstr[1]),
 						exitDate = DateTime.Parse(sstr[2])
 					};
+				temp.nowStatus = DecorateColor.getColorFlag( (DecorateColor.ColorFlag)int.Parse(sstr[3]));
 
-				if (ColorFlag.Date.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Date;
-				}
-				else if (ColorFlag.Emergency.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Emergency;
-				}
-				else if (ColorFlag.Finish.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Finish;
-				}
-				else if (ColorFlag.Memo1.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Memo1;
-				}
-				else if (ColorFlag.Memo2.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Memo2;
-				}
-				else if (ColorFlag.Memo3.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Memo3;
-				}
-				else if (ColorFlag.Unlimited.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Unlimited;
-				}
-				else if (ColorFlag.Other.ToString() == sstr[3])
-				{
-					temp.nowStatus = ColorFlag.Other;
-				}
+
+				//if (ColorFlag.Date.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Date;
+				//}
+				//else if (ColorFlag.Emergency.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Emergency;
+				//}
+				//else if (ColorFlag.Finish.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Finish;
+				//}
+				//else if (ColorFlag.Memo1.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Memo1;
+				//}
+				//else if (ColorFlag.Memo2.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Memo2;
+				//}
+				//else if (ColorFlag.Memo3.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Memo3;
+				//}
+				//else if (ColorFlag.Unlimited.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Unlimited;
+				//}
+				//else if (ColorFlag.Other.ToString() == sstr[3])
+				//{
+				//	temp.nowStatus = ColorFlag.Other;
+				//}
 				temp.name = sstr[4];
 				temp.memo = sstr[5];
 				for (int i = 6; i < sstr.Length; i++)
@@ -742,34 +700,35 @@ namespace EasyToDo
 		/// <param name="num"></param>
 		/// <param name="flag"></param>
 		/// <returns></returns>
-		public bool Check(ColorFlag num, Flags flag)
+		public bool Check(DecorateColor.ColorFlag num, Flags flag)
 		{
-			switch (num)
-			{
-				case ColorFlag.Finish:
-					if (flag.finish) return true;
-					break;
-				case ColorFlag.Emergency:
-					if (flag.emergency) return true;
-					break;
-				case ColorFlag.Date:
-					if (flag.date) return true;
-					break;
-				case ColorFlag.Unlimited:
-					if (flag.unLimited) return true;
-					break;
-				case ColorFlag.Memo1:
-					if (flag.memo1) return true;
-					break;
-				case ColorFlag.Memo2:
-					if (flag.memo2) return true;
-					break;
-				case ColorFlag.Memo3:
-					if (flag.memo3) return true;
-					break;
-			}
-			return false;
+			if (num == DecorateColor.ColorFlag.Other) return false;
+			return true;
+			//switch (num)
+			//{
+			//	case DecorateColor.Finish.ColorFlag:
+			//		if (flag.finish) return true;
+			//		break;
+			//	case DecorateColor.Emergency.ColorFlag:
+			//		if (flag.emergency) return true;
+			//		break;
+			//	case DecorateColor.Date.ColorFlag:
+			//		if (flag.date) return true;
+			//		break;
+			//	case DecorateColor.Unlimited.ColorFlag:
+			//		if (flag.unLimited) return true;
+			//		break;
+			//	case DecorateColor.Memo1.ColorFlag:
+			//		if (flag.memo1) return true;
+			//		break;
+			//	case DecorateColor.Memo2.ColorFlag:
+			//		if (flag.memo2) return true;
+			//		break;
+			//	case DecorateColor.Memo3.ColorFlag:
+			//		if (flag.memo3) return true;
+			//		break;
+			//}
+			//return false;
 		}
-
 	}
 }

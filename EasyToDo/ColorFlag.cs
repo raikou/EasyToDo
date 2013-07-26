@@ -1,27 +1,49 @@
 ﻿using System;
 using System.Drawing;
 
-namespace DecorateDisplayColor
+namespace EasyToDo
 {
 	/// <summary>
 	/// 利用する色のフラグ名
 	/// </summary>
-	public enum ColorFlag
-	{
-		Finish = 0,
-		Emergency,
-		Memo1,
-		Date,
-		Memo2,
-		Unlimited,
-		Memo3,
-
-		Other
-	};
 
     public  class DecorateColor
     {
-		public Color ForeColor(ColorFlag colorFlag)
+		public enum ColorFlag
+		{
+			Finish = 0,
+			Emergency,
+			Memo1,
+			Date,
+			Memo2,
+			Unlimited,
+			Memo3,
+
+			Other
+		};
+
+
+		public static ColorFlag getColorFlag(ColorFlag colorFlag)
+		{
+			switch (colorFlag)
+			{
+				case ColorFlag.Finish:
+					return Finish.ColorFlag;
+				case ColorFlag.Emergency:
+					return Emergency.ColorFlag;
+				case ColorFlag.Memo1:
+					return Memo1.ColorFlag;
+				case ColorFlag.Memo2:
+					return Memo2.ColorFlag;
+				case ColorFlag.Memo3:
+					return Memo3.ColorFlag;
+				case ColorFlag.Unlimited:
+					return Unlimited.ColorFlag;
+			}
+			return Date.ColorFlag;
+		}
+
+		public static Color ForeColor(ColorFlag colorFlag)
 		{
 			switch (colorFlag)
 			{
@@ -40,11 +62,11 @@ namespace DecorateDisplayColor
 			}
 			return Other.ForeColor;
 		}
-		public Color ForeColor(DateTime date)
+		public static Color ForeColor(DateTime date)
 		{
 			return Date.ForeColor(date);
 		}
-		public Color BackColor(ColorFlag colorFlag)
+		public static Color BackColor(ColorFlag colorFlag)
 		{
 			switch (colorFlag)
 			{
@@ -63,12 +85,36 @@ namespace DecorateDisplayColor
 			}
 			return Other.BackColor;
 		}
-		public Color BackColor(DateTime date)
+		public static Color BackColor(DateTime date)
 		{
 			return Date.BackColor(date);
 		}
-	    public class Finish
+		public static string Text(ColorFlag colorFlag)
 		{
+			switch (colorFlag)
+			{
+				case ColorFlag.Finish:
+					return Finish.Text;
+				case ColorFlag.Emergency:
+					return Emergency.Text;
+				case ColorFlag.Memo1:
+					return Memo1.Text;
+				case ColorFlag.Memo2:
+					return Memo2.Text;
+				case ColorFlag.Memo3:
+					return Memo3.Text;
+				case ColorFlag.Unlimited:
+					return Unlimited.Text;
+			}
+			return Other.Text;
+		}
+		public static string Text(DateTime date)
+		{
+			return Date.Text(date);
+		}
+		public class Finish
+		{
+			public static readonly string Text = "完了";
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Finish; }
@@ -87,6 +133,7 @@ namespace DecorateDisplayColor
 		}
 		public class Emergency
 		{
+			public static readonly string Text = "緊急";
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Emergency; }
@@ -105,6 +152,7 @@ namespace DecorateDisplayColor
 		}
 		public class Memo1
 		{
+			public static readonly string Text = "メモ１";
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Memo1; }
@@ -123,6 +171,10 @@ namespace DecorateDisplayColor
 		}
 		public class Date
 		{
+			public static string Text(DateTime date)
+			{
+				return date.ToString("yyyMMdd");
+			} 
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Date; }
@@ -161,6 +213,7 @@ namespace DecorateDisplayColor
 		}
 		public class Memo2
 		{
+			public static readonly string Text = "メモ２";
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Memo2; }
@@ -179,6 +232,7 @@ namespace DecorateDisplayColor
 		}
 		public class Unlimited
 		{
+			public static readonly string Text = "無期限";
 			public static Color ForeColor
 			{
 				get { return Color.Blue; }
@@ -197,6 +251,7 @@ namespace DecorateDisplayColor
 		}
 		public class Memo3
 		{
+			public static readonly string Text = "メモ３";
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Memo3; }
@@ -215,6 +270,7 @@ namespace DecorateDisplayColor
 		}
 		public class Other
 		{
+			public static readonly string Text = "その他";
 			public static ColorFlag ColorFlag
 			{
 				get { return ColorFlag.Other; }
