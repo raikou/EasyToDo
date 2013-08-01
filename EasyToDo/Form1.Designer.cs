@@ -35,9 +35,9 @@
 			this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.データ出力EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.FilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.データ出力ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.全データToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.全データ内容込ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.DataOutPutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.AllDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.AllDataInfoInToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -91,7 +91,7 @@
 			// 
 			this.データ出力EToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FilterToolStripMenuItem,
-            this.データ出力ToolStripMenuItem});
+            this.DataOutPutToolStripMenuItem});
 			this.データ出力EToolStripMenuItem.Name = "データ出力EToolStripMenuItem";
 			this.データ出力EToolStripMenuItem.Size = new System.Drawing.Size(80, 24);
 			this.データ出力EToolStripMenuItem.Text = "オプション";
@@ -103,28 +103,28 @@
 			this.FilterToolStripMenuItem.Text = "フィルタ設定";
 			this.FilterToolStripMenuItem.Click += new System.EventHandler(this.フィルタ設定ToolStripMenuItem_Click);
 			// 
-			// データ出力ToolStripMenuItem
+			// DataOutPutToolStripMenuItem
 			// 
-			this.データ出力ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.全データToolStripMenuItem,
-            this.全データ内容込ToolStripMenuItem});
-			this.データ出力ToolStripMenuItem.Name = "データ出力ToolStripMenuItem";
-			this.データ出力ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.データ出力ToolStripMenuItem.Text = "データ出力";
+			this.DataOutPutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AllDataToolStripMenuItem,
+            this.AllDataInfoInToolStripMenuItem});
+			this.DataOutPutToolStripMenuItem.Name = "データ出力ToolStripMenuItem";
+			this.DataOutPutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.DataOutPutToolStripMenuItem.Text = "データ出力";
 			// 
-			// 全データToolStripMenuItem
+			// AllDataToolStripMenuItem
 			// 
-			this.全データToolStripMenuItem.Name = "全データToolStripMenuItem";
-			this.全データToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-			this.全データToolStripMenuItem.Text = "表示データ（項目のみ）";
-			this.全データToolStripMenuItem.Click += new System.EventHandler(this.全データToolStripMenuItem_Click);
+			this.AllDataToolStripMenuItem.Name = "全データToolStripMenuItem";
+			this.AllDataToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+			this.AllDataToolStripMenuItem.Text = "表示データ（項目のみ）";
+			this.AllDataToolStripMenuItem.Click += new System.EventHandler(this.全データToolStripMenuItem_Click);
 			// 
-			// 全データ内容込ToolStripMenuItem
+			// AllDataInfoInToolStripMenuItem
 			// 
-			this.全データ内容込ToolStripMenuItem.Name = "全データ内容込ToolStripMenuItem";
-			this.全データ内容込ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-			this.全データ内容込ToolStripMenuItem.Text = "表示データ（内容込）";
-			this.全データ内容込ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click_DataRead);
+			this.AllDataInfoInToolStripMenuItem.Name = "全データ内容込ToolStripMenuItem";
+			this.AllDataInfoInToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+			this.AllDataInfoInToolStripMenuItem.Text = "表示データ（内容込）";
+			this.AllDataInfoInToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click_DataRead);
 			// 
 			// listView1
 			// 
@@ -202,7 +202,7 @@
 			this.新規作成ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.新規作成ToolStripMenuItem.Text = "新規作成";
-			this.新規作成ToolStripMenuItem.Click += new System.EventHandler(this.新規作成ToolStripMenuItem_Click);
+			this.新規作成ToolStripMenuItem.Click += new System.EventHandler(this.NewCreateToolStripMenuItem_Click);
 			// 
 			// 変更ToolStripMenuItem
 			// 
@@ -210,7 +210,7 @@
 			this.変更ToolStripMenuItem.Name = "変更ToolStripMenuItem";
 			this.変更ToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.変更ToolStripMenuItem.Text = "変更";
-			this.変更ToolStripMenuItem.Click += new System.EventHandler(this.変更ToolStripMenuItem_Click);
+			this.変更ToolStripMenuItem.Click += new System.EventHandler(this.ChangeToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
@@ -223,7 +223,7 @@
 			this.削除ToolStripMenuItem.Name = "削除ToolStripMenuItem";
 			this.削除ToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.削除ToolStripMenuItem.Text = "削除";
-			this.削除ToolStripMenuItem.Click += new System.EventHandler(this.削除ToolStripMenuItem_Click);
+			this.削除ToolStripMenuItem.Click += new System.EventHandler(this.DeleateToolStripMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -270,9 +270,9 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem FilterToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem データ出力ToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem 全データToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem 全データ内容込ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem DataOutPutToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem AllDataToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem AllDataInfoInToolStripMenuItem;
 
 	}
 }

@@ -17,11 +17,4 @@ namespace EasyToDo
 		}
 	}
 
-	/// <summary>
-	/// 利用する色情報を持つ
-	/// </summary>
-	public class decorateColor
-	{
-		
-	}
 }

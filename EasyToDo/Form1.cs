@@ -7,25 +7,23 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
+using DisplayColorUsing;
+
 namespace EasyToDo
 {
-
-
 	/// <summary>
 	/// メイン画面
 	/// </summary>
 	public partial class Form1 : Form
 	{
-		readonly Datas _data = new Datas();
-		Flags _flags = new Flags();
-		readonly UseXml _uXml = new UseXml();
-
+		private readonly Datas _data = new Datas();
+		private Flags _flags = new Flags();
+		private readonly UseXml _uXml = new UseXml();
 
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		public Form1()
-		{
+		public Form1() {
 			InitializeComponent();
 			_flags = _uXml.Read();
 			this.StartPosition = FormStartPosition.Manual;
@@ -34,8 +32,7 @@ namespace EasyToDo
 			string title = Environment.CurrentDirectory;
 			DirectoryInfo di = new DirectoryInfo(title);
 			string version = "";
-			if (_flags.check)
-			{
+			if (_flags.check) {
 				FileVersionInfo ver = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
 				version = "　　v" + ver.FileVersion;
 			}
@@ -45,20 +42,15 @@ namespace EasyToDo
 		/// <summary>
 		/// 再描画関数
 		/// </summary>
-		private void ReDraw()
-		{
-			try
-			{
+		private void ReDraw() {
+			Color c = DisplayColor.Finish.ForeColor;
+			try {
 				listView1.Items.Clear();
 				string[] str = new string[3];
 
-				for (int i = 0; i < _data.data.Count; i++)
-				{
+				for (int i = 0; i < _data.data.Count; i++) {
 					//フィルターに引っかかる物は表示しない
-					if (_uXml.Check(_data.data[i].nowStatus, _flags) != true)
-					{
-						continue;
-					}
+					if (_uXml.Check(_data.data[i].nowStatus, _flags) != true) continue;
 
 					str[0] = _data.data[i].GetStatusTextForDisp();
 					str[1] = _data.data[i].name;
@@ -69,21 +61,15 @@ namespace EasyToDo
 					//int item_num = data.same_data(listView1.Items[i].SubItems[1].Text, listView1.Items[i].SubItems[0].Text);
 
 					//色設定
-					if (_data.data[i].nowStatus == DecorateColor.Date.ColorFlag)
-					{
-						listView1.Items[itemNum].BackColor = DecorateColor.Date.ForeColor(this._data.data[i].limitDate.Date);
-						listView1.Items[itemNum].ForeColor = DecorateColor.Date.BackColor(this._data.data[i].limitDate.Date);
+					if (_data.data[i].nowStatus == DisplayColor.Date.ColorFlag) {
+						listView1.Items[itemNum].BackColor = DisplayColor.Date.getForeColor(this._data.data[i].limitDate.Date);
+						listView1.Items[itemNum].ForeColor = DisplayColor.Date.getBackColor(this._data.data[i].limitDate.Date);
+					} else {
+						listView1.Items[itemNum].BackColor = DisplayColor.ForeColor(this._data.data[i].nowStatus);
+						listView1.Items[itemNum].ForeColor = DisplayColor.ForeColor(this._data.data[i].nowStatus);
 					}
-					else
-					{
-						listView1.Items[itemNum].BackColor = DecorateColor.ForeColor(this._data.data[i].nowStatus);
-						listView1.Items[itemNum].ForeColor = DecorateColor.ForeColor(this._data.data[i].nowStatus);
-					}
-					
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				MessageBox.Show(e.Message);
 			}
 
@@ -100,8 +86,7 @@ namespace EasyToDo
 		/// </summary>
 		/// <param name="sender">しるか！</param>
 		/// <param name="e">エラーデータ</param>
-		private void Form1_Load(object sender, EventArgs e)
-		{
+		private void Form1_Load(object sender, EventArgs e) {
 			//データの読み込み
 			_data.read_data();
 			_data.MySort();
@@ -116,29 +101,23 @@ namespace EasyToDo
 		/// </summary>
 		/// <param name="sender">しるか！</param>
 		/// <param name="e"></param>
-		private void listView1_DoubleClick(object sender, EventArgs e)
-		{
+		private void listView1_DoubleClick(object sender, EventArgs e) {
 			this.Change();
 		}
 
 		/// <summary>
 		/// 表示内容の変更を行う。
 		/// </summary>
-		private void Change()
-		{
+		private void Change() {
 			int num = listView1.SelectedItems[0].Index;
-			if (num < _data.data.Count)
-			{
-
+			if (num < _data.data.Count) {
 				num = _data.same_data(listView1.Items[num].SubItems[1].Text, listView1.Items[num].SubItems[0].Text);
 
 				//生成
 				Form2 form2 = new Form2(_data.data[num].name, _data.data[num].memo, _data.data[num].GetStatusTextForDisp());
 				form2.ShowDialog(this);
 
-
-				if (form2.status)
-				{
+				if (form2.status) {
 					//データの更新
 					_data.data[num].SetStatus(form2.date);
 					_data.data[num].name = form2.name;
@@ -154,22 +133,24 @@ namespace EasyToDo
 			}
 		}
 
+		//TODO:何故か新規作成されない
 		/// <summary>
 		/// 新規作成
 		/// </summary>
-		public void Create()
-		{
+		public void Create() {
 			Form2 form2 = new Form2("", "", DateTime.Today.ToString(CultureInfo.InvariantCulture));
 			form2.ShowDialog(this);
 
-			if (form2.status)
-			{
+			if (form2.status) {
 				//データの更新
 				Data tD = new Data();
 				//data.add( form2.name, form2.memo, data.data[0].status( form2.date ) );
 				_data.Add(form2.name, form2.memo, tD.Status(form2.date));
 				int num = _data.data.Count - 1;
-				if (_data.data[num].nowStatus == DecorateColor.ColorFlag.Date) _data.data[num].SetStatus(form2.date);
+
+				//日付情報設定
+				_data.data[num].nowStatus = DisplayColor.Date.ColorFlag;
+				_data.data[num].SetStatus(form2.date);
 
 				//画面へ描画
 				_data.MySort();
@@ -184,11 +165,10 @@ namespace EasyToDo
 		/// 削除
 		/// </summary>
 		/// <param name="num"></param>
-		public void Delete(int num)
-		{
-			if (num < _data.data.Count)
-			{
-				_data.data.Remove(_data.data[_data.same_data(listView1.Items[num].SubItems[1].Text, listView1.Items[num].SubItems[0].Text)]);
+		public void Delete(int num) {
+			if (num < _data.data.Count) {
+				_data.data.Remove(
+					_data.data[_data.same_data(listView1.Items[num].SubItems[1].Text, listView1.Items[num].SubItems[0].Text)]);
 				//画面へ描画
 				_data.MySort();
 				this.ReDraw();
@@ -196,39 +176,22 @@ namespace EasyToDo
 			}
 		}
 
-		private void newMenuItem_Click(object sender, EventArgs e)
-		{
-			this.Create();
-		}
+		private void newMenuItem_Click(object sender, EventArgs e) { this.Create(); }
 
-		private void 新規作成ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			this.Create();
-		}
+		private void NewCreateToolStripMenuItem_Click(object sender, EventArgs e) { this.Create(); }
 
-		private void 変更ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			this.Change();
-		}
+		private void ChangeToolStripMenuItem_Click(object sender, EventArgs e) { this.Change(); }
 
-		private void 削除ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
+		private void DeleateToolStripMenuItem_Click(object sender, EventArgs e) {
 			int num = listView1.SelectedItems[0].Index;
 			DialogResult re = MessageBox.Show(this, "削除しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-			if (re == DialogResult.Yes)
-			{
-				this.Delete(num);
-			}
+			if (re == DialogResult.Yes) this.Delete(num);
 		}
 
-		private void toolStripMenuItem1_Click(object sender, EventArgs e)
-		{
-			try
-			{
+		private void toolStripMenuItem1_Click(object sender, EventArgs e) {
+			try {
 				int num = listView1.SelectedItems[0].Index;
-				if (num < _data.data.Count)
-				{
-
+				if (num < _data.data.Count) {
 					num = _data.same_data(listView1.Items[num].SubItems[1].Text, listView1.Items[num].SubItems[0].Text);
 
 					//変更
@@ -240,16 +203,12 @@ namespace EasyToDo
 					this.ReDraw();
 					_data.write_data();
 				}
-
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
 		}
 
-		private void フィルタ設定ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
+		private void フィルタ設定ToolStripMenuItem_Click(object sender, EventArgs e) {
 			Form3 f = new Form3();
 			f.ShowDialog(this);
 
@@ -259,10 +218,8 @@ namespace EasyToDo
 			this.ReDraw();
 		}
 
-		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			try
-			{
+		private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+			try {
 				//↓のように設定していけば設定が保存される 場所：Form1.Designer.cs
 				Properties.Settings.Default.ColumnIndex_0 = this.columnHeader1.DisplayIndex;
 				Properties.Settings.Default.ColumnWidth_0 = this.columnHeader1.Width;
@@ -279,109 +236,74 @@ namespace EasyToDo
 
 				//最後に保存
 				Properties.Settings.Default.Save();
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
 		}
 
-		private void 全データToolStripMenuItem_Click(object sender, EventArgs e)
-		{
+		private void 全データToolStripMenuItem_Click(object sender, EventArgs e) {
 			OutFileDataSet outData = new OutFileDataSet();
 			outData.AllDataTitle(_data);
 		}
 
-		private void ToolStripMenuItem_Click_Ver_Info(object sender, EventArgs e)
-		{
+		private void ToolStripMenuItem_Click_Ver_Info(object sender, EventArgs e) {
 			System.Diagnostics.FileVersionInfo ver =
 				System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
 			MessageBox.Show("バージョン：" + ver.FileVersion.ToString(CultureInfo.InvariantCulture), "バージョン情報");
 		}
 
-		private void Form1_Activated(object sender, EventArgs e)
-		{
-			this.ReDraw();
-		}
+		private void Form1_Activated(object sender, EventArgs e) { this.ReDraw(); }
 
-		private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-		{
-			try
-			{
+		private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) {
+			try {
 				int num = listView1.SelectedItems[0].Index;
-				if (num < _data.data.Count)
-				{
+				if (num < _data.data.Count) {
 					this.変更ToolStripMenuItem.Enabled = true;
 					this.toolStripMenuItem1.Enabled = true;
 					this.削除ToolStripMenuItem.Enabled = true;
-
 				}
-			}
-			catch
-			{
+			} catch {
 				this.変更ToolStripMenuItem.Enabled = false;
 				this.toolStripMenuItem1.Enabled = false;
 				this.削除ToolStripMenuItem.Enabled = false;
 			}
 		}
 
-		private void ToolStripMenuItem_Click_DataRead(object sender, EventArgs e)
-		{
+		private void ToolStripMenuItem_Click_DataRead(object sender, EventArgs e) {
 			OutFileDataSet outData = new OutFileDataSet();
 			outData.AllDatas(_data);
 		}
 	}
-
 
 	/// <summary>
 	/// 情報格納場所
 	/// </summary>
 	public class Data
 	{
-		//構造情報
-		public DecorateColor.ColorFlag nowStatus;
+		/// <summary>
+		/// 色のフラグ保持
+		/// </summary>
+		public ColorStatus nowStatus;
+		/// <summary>
+		/// データの「制限日時」「作成日時」「完了日時」
+		/// </summary>
 		public DateTime limitDate, createDate, exitDate;
-		public string name, memo;
+		/// <summary>
+		/// リストに表示される名称
+		/// </summary>
+		public string name;
 
+		/// <summary>
+		/// メモに表示される内容
+		/// </summary>
+		public string memo;
 
 		/// <summary>
 		/// now_statusに対応する文字列を返す
-		/// -1：完了
-		/// ０：緊急
-		/// １：日付
-		/// ２：無期限
-		/// ３：メモ１
-		/// ４：メモ２
-		/// ５：メモ３
 		/// </summary>
 		/// <returns>期限の文字列</returns>
-		public string GetStatusTextForDisp()
-		{
-			return DecorateColor.Text(nowStatus);
-			//switch (nowStatus)
-			//{
-			//	case DecorateColor.ColorFlag.Finish:
-			//		return "完了";
-			//	case DecorateColor.ColorFlag.Date:
-			//		//　月/日　を返すように変更
-			//		string str = "";
-			//		str += this.limitDate.Month + "/" + this.limitDate.Day;
-			//		return str;
-			//	//return this.limitDate.ToShortDateString();
-			//	case ColorFlag.Unlimited:
-			//		return "無期限";
-			//	case ColorFlag.Memo1:
-			//		return "メモ１";
-			//	case ColorFlag.Memo2:
-			//		return "メモ２";
-			//	case ColorFlag.Memo3:
-			//		return "メモ３";
-			//	case ColorFlag.Emergency:
-			//		return "緊急";
-			//	default:
-			//		MessageBox.Show(" getStatus においてエラーが発生しました。 ");
-			//		return "";
-			//}
+		public string GetStatusTextForDisp() {
+			return DisplayColor.GetDispName( nowStatus );
 		}
 
 		/// <summary>
@@ -389,13 +311,9 @@ namespace EasyToDo
 		/// このデータはgetStatus()で読み出せる
 		/// </summary>
 		/// <param name="statusString">日付または定めた文字列</param>
-		public void SetStatus(string statusString)
-		{
-			nowStatus = this.Status( statusString);
-			if ( nowStatus == DecorateColor.Date.ColorFlag)
-			{
-				limitDate = DateTime.Parse(statusString);
-			}
+		public void SetStatus(string statusString) {
+			nowStatus = this.Status(statusString);
+			if (nowStatus == DisplayColor.Date.ColorFlag) limitDate = DateTime.Parse(statusString);
 		}
 
 		/// <summary>
@@ -403,42 +321,11 @@ namespace EasyToDo
 		/// </summary>
 		/// <param name="statusString"></param>
 		/// <returns></returns>
-		public DecorateColor.ColorFlag Status(string statusString)
-		{
-			return DecorateColor.getColorFlag( (DecorateColor.ColorFlag) int.Parse(statusString)) == DecorateColor.ColorFlag.Date ? statusString:DecorateColor.getColorFlag( (DecorateColor.ColorFlag) int.Parse(statusString));
-			//ColorFlag now;
-			//if (statusString == "緊急")
-			//{
-			//	now = ColorFlag.Emergency;
-			//}
-			//else if (statusString == "メモ１")
-			//{
-			//	now = ColorFlag.Memo1;
-			//}
-			//else if (statusString == "メモ２")
-			//{
-			//	now = ColorFlag.Memo2;
-			//}
-			//else if (statusString == "メモ３")
-			//{
-			//	now = ColorFlag.Memo3;
-			//}
-			//else if (statusString == "無期限")
-			//{
-			//	now = ColorFlag.Unlimited;
-			//}
-			//else if (statusString == "完了")
-			//{
-			//	now = ColorFlag.Finish;
-			//}
-			//else
-			//{
-			//	//例外データが来たときの処理を核必要あり：正規表現
-			//	now = ColorFlag.Date;
-			//}
-			//return now;
+		public ColorStatus Status(string statusString) {
+			return DisplayColor.GetColorStatus( statusString );
 		}
 	}
+
 	/// <summary>
 	/// 全情報を持つクラス。
 	/// </summary>
@@ -464,17 +351,15 @@ namespace EasyToDo
 		/// <param name="name">やること</param>
 		/// <param name="memo">メモ</param>
 		/// <param name="nowStatus">期限の状態</param>
-		public void Add(string name, string memo, DecorateColor.ColorFlag nowStatus)
-		{
-			Data temp = new Data
-				{
-					createDate = DateTime.Now,
-					limitDate = DateTime.Now,
-					exitDate = DateTime.Now,
-					name = name,
-					memo = memo,
-					nowStatus = nowStatus
-				};
+		public void Add(string name, string memo, ColorStatus nowStatus) {
+			Data temp = new Data {
+				createDate = DateTime.Now,
+				limitDate = DateTime.Now,
+				exitDate = DateTime.Now,
+				name = name,
+				memo = memo,
+				nowStatus = nowStatus
+			};
 
 			this.data.Add(temp);
 			this.MySort();
@@ -483,17 +368,15 @@ namespace EasyToDo
 		/// <summary>
 		/// データの書き出し
 		/// </summary>
-		public void write_data()
-		{
+		public void write_data() {
 			StreamWriter sw = new StreamWriter(FileName, false, System.Text.Encoding.GetEncoding("shift_jis"));
-			foreach (Data dataInfo in data)
-			{
+			foreach (Data dataInfo in data) {
 				string str = dataInfo.createDate + ","
-							 + dataInfo.limitDate + ","
-							 + dataInfo.exitDate + ","
-							 + dataInfo.nowStatus + ","
-							 + dataInfo.name + ","
-							 + dataInfo.memo.Replace(Environment.NewLine, ENTER_STR);
+				             + dataInfo.limitDate + ","
+				             + dataInfo.exitDate + ","
+				             + dataInfo.nowStatus + ","
+				             + dataInfo.name + ","
+				             + dataInfo.memo.Replace(Environment.NewLine, ENTER_STR);
 				sw.WriteLine(str);
 			}
 
@@ -503,68 +386,26 @@ namespace EasyToDo
 		/// <summary>
 		/// データの読み込み
 		/// </summary>
-		public void read_data()
-		{
-			if (File.Exists(FileName))
-			{
-			}
-			else
-			{
+		public void read_data() {
+			if (File.Exists(FileName)) {} else {
 				FileStream fs = new FileStream(FileName, FileMode.Create);
 				fs.Close();
 			}
 			StreamReader sr = new StreamReader(FileName, System.Text.Encoding.GetEncoding("shift_jis"));
 
-			while (sr.Peek() > -1)
-			{
+			while (sr.Peek() > -1) {
 				string str = sr.ReadLine();
 				Debug.Assert(str != null, "str != null");
 				string[] sstr = str.Split(',');
-				Data temp = new Data
-					{
-						createDate = DateTime.Parse(sstr[0]),
-						limitDate = DateTime.Parse(sstr[1]),
-						exitDate = DateTime.Parse(sstr[2])
-					};
-				temp.nowStatus = DecorateColor.getColorFlag( (DecorateColor.ColorFlag)int.Parse(sstr[3]));
-
-
-				//if (ColorFlag.Date.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Date;
-				//}
-				//else if (ColorFlag.Emergency.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Emergency;
-				//}
-				//else if (ColorFlag.Finish.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Finish;
-				//}
-				//else if (ColorFlag.Memo1.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Memo1;
-				//}
-				//else if (ColorFlag.Memo2.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Memo2;
-				//}
-				//else if (ColorFlag.Memo3.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Memo3;
-				//}
-				//else if (ColorFlag.Unlimited.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Unlimited;
-				//}
-				//else if (ColorFlag.Other.ToString() == sstr[3])
-				//{
-				//	temp.nowStatus = ColorFlag.Other;
-				//}
+				Data temp = new Data {
+					createDate = DateTime.Parse(sstr[0]),
+					limitDate = DateTime.Parse(sstr[1]),
+					exitDate = DateTime.Parse(sstr[2])
+				};
+				temp.nowStatus = DisplayColor.GetColorStatus(sstr[3]);
 				temp.name = sstr[4];
 				temp.memo = sstr[5];
-				for (int i = 6; i < sstr.Length; i++)
-				{
+				for (int i = 6; i < sstr.Length; i++) {
 					temp.memo += ",";
 					temp.memo += sstr[i];
 				}
@@ -582,14 +423,10 @@ namespace EasyToDo
 		/// </summary>
 		/// <param name="tname">listView1.Items[num].SubItems[1].Text</param>
 		/// <param name="tdate">listView1.Items[num].SubItems[0].Text</param>
-		public int same_data(string tname, string tdate)
-		{
-			for (int i = 0; i < data.Count; i++)
-			{
-				if (tdate == data[i].GetStatusTextForDisp())
-				{
-					if (tname == data[i].name)
-					{
+		public int same_data(string tname, string tdate) {
+			for (int i = 0; i < data.Count; i++) {
+				if (tdate == data[i].GetStatusTextForDisp()) {
+					if (tname == data[i].name) {
 						//data.data.Remove( data.data[num] );
 						//画面へ描画
 						return i;
@@ -602,26 +439,19 @@ namespace EasyToDo
 		/// <summary>
 		/// このクラスにおける独自ソート
 		/// </summary>
-		public void MySort()
-		{
-			while (true)
-			{
+		public void MySort() {
+			while (true) {
 				bool flag = true;
 
-				for (int i = 0; i < data.Count - 1; i++)
-				{
+				for (int i = 0; i < data.Count - 1; i++) {
 					Data temp;
-					if ((int)data[i].nowStatus > (int)data[i + 1].nowStatus)
-					{
+					if ((int) data[i].nowStatus > (int) data[i + 1].nowStatus) {
 						flag = false;
 						temp = data[i];
 						data[i] = data[i + 1];
 						data[i + 1] = temp;
-					}
-					else if ((int)data[i].nowStatus == (int)data[i + 1].nowStatus)
-					{
-						if (data[i].limitDate > data[i + 1].limitDate)
-						{
+					} else if ((int) data[i].nowStatus == (int) data[i + 1].nowStatus) {
+						if (data[i].limitDate > data[i + 1].limitDate) {
 							flag = false;
 							temp = data[i];
 							data[i] = data[i + 1];
@@ -643,7 +473,8 @@ namespace EasyToDo
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool finish = false, date = true, unLimited = true, memo1 = true, memo2 = true, memo3 = true, emergency = true, check = true;
+		public bool finish = false, date = true, unLimited = true, memo1 = true, memo2 = true, memo3 = true, emergency = true,
+			check = true;
 #pragma warning disable 1591
 		public int locationX = 100, locationY = 100;
 #pragma warning restore 1591
@@ -662,19 +493,15 @@ namespace EasyToDo
 		/// XML読み込み
 		/// </summary>
 		/// <returns></returns>
-		public Flags Read()
-		{
+		public Flags Read() {
 			Flags f;
 
-			try
-			{
-				System.Xml.Serialization.XmlSerializer seri = new System.Xml.Serialization.XmlSerializer(typeof(Flags));
+			try {
+				System.Xml.Serialization.XmlSerializer seri = new System.Xml.Serialization.XmlSerializer(typeof (Flags));
 				FileStream fs = new FileStream(FILE_NAME, FileMode.Open);
-				f = (Flags)seri.Deserialize(fs);
+				f = (Flags) seri.Deserialize(fs);
 				fs.Close();
-			}
-			catch (Exception)
-			{
+			} catch (Exception) {
 				f = new Flags();
 				this.Write(f);
 				return this.Read();
@@ -686,9 +513,8 @@ namespace EasyToDo
 		/// 
 		/// </summary>
 		/// <param name="f"></param>
-		public void Write(Flags f)
-		{
-			System.Xml.Serialization.XmlSerializer seri = new System.Xml.Serialization.XmlSerializer(typeof(Flags));
+		public void Write(Flags f) {
+			System.Xml.Serialization.XmlSerializer seri = new System.Xml.Serialization.XmlSerializer(typeof (Flags));
 			FileStream fs = new FileStream(FILE_NAME, FileMode.Create);
 			seri.Serialize(fs, f);
 			fs.Close();
@@ -700,35 +526,9 @@ namespace EasyToDo
 		/// <param name="num"></param>
 		/// <param name="flag"></param>
 		/// <returns></returns>
-		public bool Check(DecorateColor.ColorFlag num, Flags flag)
-		{
-			if (num == DecorateColor.ColorFlag.Other) return false;
+		public bool Check(ColorStatus num, Flags flag) {
+			if (num == ColorStatus.DefColor) return false;
 			return true;
-			//switch (num)
-			//{
-			//	case DecorateColor.Finish.ColorFlag:
-			//		if (flag.finish) return true;
-			//		break;
-			//	case DecorateColor.Emergency.ColorFlag:
-			//		if (flag.emergency) return true;
-			//		break;
-			//	case DecorateColor.Date.ColorFlag:
-			//		if (flag.date) return true;
-			//		break;
-			//	case DecorateColor.Unlimited.ColorFlag:
-			//		if (flag.unLimited) return true;
-			//		break;
-			//	case DecorateColor.Memo1.ColorFlag:
-			//		if (flag.memo1) return true;
-			//		break;
-			//	case DecorateColor.Memo2.ColorFlag:
-			//		if (flag.memo2) return true;
-			//		break;
-			//	case DecorateColor.Memo3.ColorFlag:
-			//		if (flag.memo3) return true;
-			//		break;
-			//}
-			//return false;
 		}
 	}
 }
