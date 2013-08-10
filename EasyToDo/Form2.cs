@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using DisplayColorUsing;
 
 namespace EasyToDo
 {
@@ -8,62 +9,60 @@ namespace EasyToDo
 	/// </summary>
 	public partial class Form2 : Form
 	{
-#pragma warning disable 1591
-		public string date, name, memo;
-		public string check=""; // 期限を一時的に保存する物
+		public string name, memo;
+		public DateTime date;
+		public ColorStatus colorStatus;
 		public bool status = false; //true:OK false:キャンセル
 
-		public Form2()
+		public Form2(string _name, string _memo, ColorStatus _colorStatus, DateTime _date)
 		{
 			InitializeComponent();
+			this.name = _name;
+			this.memo = _memo;
+			this.colorStatus = _colorStatus;
+			this.date = _date;
 		}
-		public Form2( string name, string memo, string date )
-		{
-			InitializeComponent();
-			this.name = name;
-			this.memo = memo;
-			this.date = date;
-
-		}
-#pragma warning restore 1591
 
 		private void Form2_Load(object sender, EventArgs e)
 		{
-			try{
+			try
+			{
 				this.textBox1.Text = this.name;
 				this.textBox2.Text = this.memo;
-				if( this.date == "緊急")
+				if (this.colorStatus == DisplayColor.Emergency.ColorFlag)
 				{
 					this.radioButton2.Checked = true;
 				}
-				else if (this.date == "完了")
+				else if (this.colorStatus == DisplayColor.Finish.ColorFlag)
 				{
 					//完了の場合は表示を無期限に自動的にする
 					this.radioButton3.Checked = true;
 				}
-				else if (this.date == "無期限")
+				else if (this.colorStatus == DisplayColor.Unlimited.ColorFlag)
 				{
 					this.radioButton3.Checked = true;
 				}
-				else if (this.date == "メモ１")
+				else if (this.colorStatus == DisplayColor.Memo1.ColorFlag)
 				{
 					this.radioButton4.Checked = true;
 				}
-				else if (this.date == "メモ２")
+				else if (this.colorStatus == DisplayColor.Memo2.ColorFlag)
 				{
 					this.radioButton5.Checked = true;
 				}
-				else if (this.date == "メモ３")
+				else if (this.colorStatus == DisplayColor.Memo3.ColorFlag)
 				{
 					this.radioButton6.Checked = true;
 				}
 				else
 				{
 					this.radioButton1.Checked = true;
-					this.dateTimePicker1.Text = this.date;
+					this.dateTimePicker1.Value = this.date;
 				}
-			}catch(Exception ex ){
-				MessageBox.Show( ex.Message );
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
 			}
 		}
 
@@ -76,49 +75,48 @@ namespace EasyToDo
 			this.status = true;
 			this.name = this.textBox1.Text;
 			this.memo = this.textBox2.Text;
-			this.date = this.check;
+			this.date = this.dateTimePicker1.Value;
 			this.Close();
 		}
 
 		private void radioButton1_CheckedChanged(object sender, EventArgs e)
 		{
-			this.check = this.dateTimePicker1.Text;
+			this.date = this.dateTimePicker1.Value;
 		}
 
 		private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
 		{
-			this.check = this.dateTimePicker1.Text;
 			radioButton1.Checked = true;
+			this.colorStatus = DisplayColor.Date.ColorFlag;
 		}
 
 		private void radioButton2_CheckedChanged(object sender, EventArgs e)
 		{
-			this.check = "緊急";
+			this.colorStatus = DisplayColor.Emergency.ColorFlag;
 		}
 
 		private void radioButton3_CheckedChanged(object sender, EventArgs e)
 		{
-			this.check = "無期限";
+			this.colorStatus = DisplayColor.Unlimited.ColorFlag;
 		}
 
 		private void radioButton4_CheckedChanged(object sender, EventArgs e)
 		{
-			this.check = "メモ１";
+			this.colorStatus = DisplayColor.Memo1.ColorFlag;
 		}
 
 		private void radioButton5_CheckedChanged(object sender, EventArgs e)
 		{
-			this.check = "メモ２";
+			this.colorStatus = DisplayColor.Memo2.ColorFlag;
 		}
 
 		private void radioButton6_CheckedChanged(object sender, EventArgs e)
 		{
-			this.check = "メモ３";
+			this.colorStatus = DisplayColor.Memo3.ColorFlag;
 		}
 
 		private void Cancel_Button_Click(object sender, EventArgs e)
 		{
-			//this.save();
 			this.Close();
 		}
 
@@ -129,7 +127,8 @@ namespace EasyToDo
 
 		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if( e.KeyChar == (char)Keys.Return ){
+			if (e.KeyChar == (char)Keys.Return)
+			{
 				this.Save();
 			}
 		}
@@ -146,7 +145,5 @@ namespace EasyToDo
 		{
 			this.textBox1.Focus();
 		}
-
-
 	}
 }

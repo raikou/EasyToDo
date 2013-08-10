@@ -10,8 +10,8 @@ namespace EasyToDo
 	/// </summary>
 	public partial class Form3 : Form
 	{
-		readonly Flags _flags ;
-		readonly UseXml _uXml = new UseXml();
+		readonly Flags m_flags ;
+		readonly SettingConfig m_uXml = new SettingConfig();
 
 		/// <summary>
 		/// 
@@ -19,28 +19,28 @@ namespace EasyToDo
 		public Form3()
 		{
 			InitializeComponent();
-			_flags = _uXml.Read();
-			this.checkBox1.Checked = _flags.finish;
-			this.checkBox2.Checked = _flags.date;
-			this.checkBox3.Checked = _flags.unLimited;
-			this.checkBox4.Checked = _flags.memo1;
-			this.checkBox5.Checked = _flags.memo2;
-			this.checkBox6.Checked = _flags.memo3;
-			this.checkBox7.Checked = _flags.emergency;
-			this.checkBox8.Checked = _flags.check;
+			m_flags = m_uXml.Read();
+			this.checkBox1.Checked = m_flags.finish;
+			this.checkBox2.Checked = m_flags.date;
+			this.checkBox3.Checked = m_flags.unLimited;
+			this.checkBox4.Checked = m_flags.memo1;
+			this.checkBox5.Checked = m_flags.memo2;
+			this.checkBox6.Checked = m_flags.memo3;
+			this.checkBox7.Checked = m_flags.emergency;
+			this.checkBox8.Checked = m_flags.check;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			_flags.finish	= this.checkBox1.Checked;
-			_flags.date		= this.checkBox2.Checked;
-			_flags.unLimited = this.checkBox3.Checked;
-			_flags.memo1		= this.checkBox4.Checked;
-			_flags.memo2		= this.checkBox5.Checked;
-			_flags.memo3		= this.checkBox6.Checked;
-			_flags.emergency = this.checkBox7.Checked;
-			_flags.check		= this.checkBox8.Checked;
-			_uXml.Write( _flags );
+			m_flags.finish	= this.checkBox1.Checked;
+			m_flags.date		= this.checkBox2.Checked;
+			m_flags.unLimited = this.checkBox3.Checked;
+			m_flags.memo1		= this.checkBox4.Checked;
+			m_flags.memo2		= this.checkBox5.Checked;
+			m_flags.memo3		= this.checkBox6.Checked;
+			m_flags.emergency = this.checkBox7.Checked;
+			m_flags.check		= this.checkBox8.Checked;
+			m_uXml.Write( m_flags );
 			this.Close();
 		}
 
