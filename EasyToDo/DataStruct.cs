@@ -30,8 +30,7 @@ namespace EasyToDo
 				return temp;
 			}
 		}
-
-
+		
 		/// <summary>
 		///     保存するファイル名
 		///     ※拡張子は不要
