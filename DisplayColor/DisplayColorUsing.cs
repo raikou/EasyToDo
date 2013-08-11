@@ -6,7 +6,7 @@ namespace DisplayColorUsing
 	/// <summary>
 	///     色の状態識別子
 	/// </summary>
-	public enum ColorStatus :int
+	public enum ColorStatus
 	{
 		Finish = 0,
 		Emergency,
@@ -29,13 +29,13 @@ namespace DisplayColorUsing
 		/// <param name="_colorStatusString">画面に表示中の文字列</param>
 		/// <returns>色情報の識別子</returns>
 		public static ColorStatus GetColorStatusString( string _colorStatusString ) {
-			if ( _colorStatusString == Finish.DisplayName ) return ColorStatus.Finish;
-			if ( _colorStatusString == Emergency.DisplayName ) return ColorStatus.Emergency;
-			if ( _colorStatusString == Memo1.DisplayName ) return ColorStatus.Memo1;
-			if ( _colorStatusString == Memo2.DisplayName ) return ColorStatus.Memo2;
-			if ( _colorStatusString == Memo3.DisplayName ) return ColorStatus.Memo3;
-			if ( _colorStatusString == Unlimited.DisplayName ) return ColorStatus.Unlimited;
-			return _colorStatusString == DefColor.DisplayName ? ColorStatus.DefColor : ColorStatus.Date;
+			if (_colorStatusString == Finish.DisplayName) return Finish.ColorFlag;
+			if (_colorStatusString == Emergency.DisplayName) return Emergency.ColorFlag;
+			if (_colorStatusString == Memo1.DisplayName) return Memo1.ColorFlag;
+			if (_colorStatusString == Memo2.DisplayName) return Memo2.ColorFlag;
+			if (_colorStatusString == Memo3.DisplayName) return Memo3.ColorFlag;
+			if (_colorStatusString == Unlimited.DisplayName) return Unlimited.ColorFlag;
+			return _colorStatusString == DefColor.DisplayName ? DefColor.ColorFlag : Date.ColorFlag;
 		}
 
 		/// <summary>
@@ -44,13 +44,13 @@ namespace DisplayColorUsing
 		/// <param name="_colorStatusInt">データベースに保存した int 型の値</param>
 		/// <returns>色情報の識別子</returns>
 		public static ColorStatus GetColorStatusInt( int _colorStatusInt ) {
-			if ( _colorStatusInt == (int)Finish.ColorFlag ) return ColorStatus.Finish;
-			if ( _colorStatusInt == (int)Emergency.ColorFlag ) return ColorStatus.Emergency;
-			if ( _colorStatusInt == (int)Memo1.ColorFlag ) return ColorStatus.Memo1;
-			if ( _colorStatusInt == (int)Memo2.ColorFlag ) return ColorStatus.Memo2;
-			if ( _colorStatusInt == (int)Memo3.ColorFlag ) return ColorStatus.Memo3;
-			if ( _colorStatusInt == (int)Unlimited.ColorFlag ) return ColorStatus.Unlimited;
-			return _colorStatusInt == (int)Date.ColorFlag ? ColorStatus.Date : ColorStatus.DefColor;
+			if (_colorStatusInt == (int)Finish.ColorFlag) return Finish.ColorFlag;
+			if (_colorStatusInt == (int)Emergency.ColorFlag) return Emergency.ColorFlag;
+			if (_colorStatusInt == (int)Memo1.ColorFlag) return Memo1.ColorFlag;
+			if (_colorStatusInt == (int)Memo2.ColorFlag) return Memo2.ColorFlag;
+			if (_colorStatusInt == (int)Memo3.ColorFlag) return Memo3.ColorFlag;
+			if (_colorStatusInt == (int)Unlimited.ColorFlag) return Unlimited.ColorFlag;
+			return _colorStatusInt == (int)Date.ColorFlag ? Date.ColorFlag : DefColor.ColorFlag;
 		}
 
 		/// <summary>
@@ -59,13 +59,13 @@ namespace DisplayColorUsing
 		/// <param name="_colorStatus"> 色情報の識別子 </param>
 		/// <returns>色情報の識別子</returns>
 		public static Color ForeColor( ColorStatus _colorStatus ) {
-			if ( _colorStatus == ColorStatus.Finish ) return Finish.ForeColor;
-			if ( _colorStatus == ColorStatus.Emergency ) return Emergency.ForeColor;
-			if ( _colorStatus == ColorStatus.Memo1 ) return Memo1.ForeColor;
-			if ( _colorStatus == ColorStatus.Memo2 ) return Memo2.ForeColor;
-			if ( _colorStatus == ColorStatus.Memo3 ) return Memo3.ForeColor;
-			if ( _colorStatus == ColorStatus.Unlimited ) return Unlimited.ForeColor;
-			return _colorStatus == ColorStatus.Date ? Date.ForeColor : DefColor.ForeColor;
+			if ( _colorStatus == Finish.ColorFlag ) return Finish.ForeColor;
+			if (_colorStatus == Emergency.ColorFlag) return Emergency.ForeColor;
+			if (_colorStatus == Memo1.ColorFlag) return Memo1.ForeColor;
+			if (_colorStatus == Memo2.ColorFlag) return Memo2.ForeColor;
+			if (_colorStatus == Memo3.ColorFlag) return Memo3.ForeColor;
+			if (_colorStatus == Unlimited.ColorFlag) return Unlimited.ForeColor;
+			return _colorStatus == Date.ColorFlag ? Date.ForeColor : DefColor.ForeColor;
 		}
 
 		/// <summary>
@@ -73,34 +73,35 @@ namespace DisplayColorUsing
 		/// </summary>
 		/// <param name="_colorStatus"> 色情報の識別子 </param>
 		/// <returns>色情報の識別子</returns>
-		public static Color BackColor( ColorStatus _colorStatus ) {
-			if ( _colorStatus == ColorStatus.Finish ) return Finish.BackColor;
-			if ( _colorStatus == ColorStatus.Emergency ) return Emergency.BackColor;
-			if ( _colorStatus == ColorStatus.Memo1 ) return Memo1.BackColor;
-			if ( _colorStatus == ColorStatus.Memo2 ) return Memo2.BackColor;
-			if ( _colorStatus == ColorStatus.Memo3 ) return Memo3.BackColor;
-			if ( _colorStatus == ColorStatus.Unlimited ) return Unlimited.BackColor;
-			return _colorStatus == ColorStatus.Date ? Date.BackColor : DefColor.BackColor;
+		public static Color BackColor(ColorStatus _colorStatus)
+		{
+			if (_colorStatus == Finish.ColorFlag) return Finish.BackColor;
+			if (_colorStatus == Emergency.ColorFlag) return Emergency.BackColor;
+			if (_colorStatus == Memo1.ColorFlag) return Memo1.BackColor;
+			if (_colorStatus == Memo2.ColorFlag) return Memo2.BackColor;
+			if (_colorStatus == Memo3.ColorFlag) return Memo3.BackColor;
+			if (_colorStatus == Unlimited.ColorFlag) return Unlimited.BackColor;
+			return _colorStatus == Date.ColorFlag ? Date.BackColor : DefColor.BackColor;
 		}
 
 		/// <summary>
 		///     設定されている背景色を返す
 		/// </summary>
-		/// <param name="colorStatus"> 色情報の識別子 </param>
+		/// <param name="_colorStatus">色情報の識別子</param>
 		/// <returns>色情報の識別子</returns>
-		public static string GetDispName( ColorStatus colorStatus ) {
-			if ( colorStatus == ColorStatus.Finish ) return Finish.DisplayName;
-			if ( colorStatus == ColorStatus.Emergency ) return Emergency.DisplayName;
-			if ( colorStatus == ColorStatus.Memo1 ) return Memo1.DisplayName;
-			if ( colorStatus == ColorStatus.Memo2 ) return Memo2.DisplayName;
-			if ( colorStatus == ColorStatus.Memo3 ) return Memo3.DisplayName;
-			if ( colorStatus == ColorStatus.Unlimited ) return Unlimited.DisplayName;
-			if ( colorStatus == ColorStatus.Date ) return Date.DisplayName;
-			return DefColor.DisplayName;
+		public static string GetDispName(ColorStatus _colorStatus)
+		{
+			if (_colorStatus == Finish.ColorFlag) return Finish.DisplayName;
+			if (_colorStatus == Emergency.ColorFlag) return Emergency.DisplayName;
+			if (_colorStatus == Memo1.ColorFlag) return Memo1.DisplayName;
+			if (_colorStatus == Memo2.ColorFlag) return Memo2.DisplayName;
+			if (_colorStatus == Memo3.ColorFlag) return Memo3.DisplayName;
+			if (_colorStatus == Unlimited.ColorFlag) return Unlimited.DisplayName;
+			return _colorStatus == Date.ColorFlag ? Date.DisplayName : DefColor.DisplayName;
 		}
 
 		/// <summary>
-		///     //TODO:こいつだけ特殊
+		/// 日付に関する情報を持つ
 		/// </summary>
 		public class Date
 		{
@@ -148,19 +149,23 @@ namespace DisplayColorUsing
 			}
 			#endregion
 
-			public static Color GetForeColor( DateTime assesmentDate ) {
+			public static Color GetForeColor( DateTime _assesmentDate ) {
 				DateTime today = DateTime.Now;
-				if ( assesmentDate > today - MinusThreeDay ) return ForeColor;
-				return assesmentDate > today - MinusOneDay ? ForeColorNearLimit : ForeColorLimit;
+				if ( _assesmentDate > today - MinusThreeDay ) return ForeColor;
+				return _assesmentDate > today - MinusOneDay ? ForeColorNearLimit : ForeColorLimit;
 			}
 
-			public static Color GetBackColor( DateTime assesmentDate ) {
+			public static Color GetBackColor( DateTime _assesmentDate ) {
 				DateTime today = DateTime.Now;
-				if ( assesmentDate > today - MinusThreeDay ) return BackColor;
-				return assesmentDate > today - MinusOneDay ? BackColorNearLimit : BackColorLimit;
+				if ( _assesmentDate > today - MinusThreeDay ) return BackColor;
+				return _assesmentDate > today - MinusOneDay ? BackColorNearLimit : BackColorLimit;
 			}
 		}
 
+
+		/// <summary>
+		/// デフォルトカラー
+		/// </summary>
 		public abstract class DefColor
 		{
 			protected static string displayName = "その他";
@@ -187,6 +192,9 @@ namespace DisplayColorUsing
 			public override string ToString() { return DisplayName; }
 		}
 
+		/// <summary>
+		/// 緊急で対応する物の設定
+		/// </summary>
 		public class Emergency
 		{
 			public static string DisplayName
@@ -207,6 +215,9 @@ namespace DisplayColorUsing
 			}
 		}
 
+		/// <summary>
+		/// 完了した物の設定
+		/// </summary>
 		public class Finish
 		{
 			public static string DisplayName
@@ -227,6 +238,9 @@ namespace DisplayColorUsing
 			}
 		}
 
+		/// <summary>
+		/// メモ１の設定（メモ内で一番上になるもの）
+		/// </summary>
 		public class Memo1
 		{
 			public static string DisplayName
@@ -247,6 +261,9 @@ namespace DisplayColorUsing
 			}
 		}
 
+		/// <summary>
+		/// メモ２の設定（メモ内で二番上になるもの）
+		/// </summary>
 		public class Memo2
 		{
 			public static string DisplayName
@@ -267,6 +284,9 @@ namespace DisplayColorUsing
 			}
 		}
 
+		/// <summary>
+		/// メモ３の設定（メモ内で最後になるもの）
+		/// </summary>
 		public class Memo3
 		{
 			public static string DisplayName
@@ -287,6 +307,9 @@ namespace DisplayColorUsing
 			}
 		}
 
+		/// <summary>
+		/// 無期限の設定
+		/// </summary>
 		public class Unlimited
 		{
 			public static string DisplayName
