@@ -8,6 +8,9 @@ using DisplayColorUsing;
 
 namespace EasyToDo
 {
+	/// <summary>
+	/// ファイル出力を制御する
+	/// </summary>
 	public class OutFileDataSet
 	{
 		private readonly DataStruct m_dataStruct = new DataStruct();
