@@ -1,0 +1,45 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EasyToDo.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MyLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">100, 100</Value>
+    </Setting>
+    <Setting Name="MyClientSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">284, 262</Value>
+    </Setting>
+    <Setting Name="ListLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 24</Value>
+    </Setting>
+    <Setting Name="ListSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">349, 121</Value>
+    </Setting>
+    <Setting Name="ListAliment" Type="System.Windows.Forms.ListViewAlignment" Scope="User">
+      <Value Profile="(Default)">Top</Value>
+    </Setting>
+    <Setting Name="Column0" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">85</Value>
+    </Setting>
+    <Setting Name="ColumnWidth_0" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">85</Value>
+    </Setting>
+    <Setting Name="ColumnIndex_0" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ColumnWidth_1" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">218</Value>
+    </Setting>
+    <Setting Name="ColumnIndex_1" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="ColumnWidht_3" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="ColumnIndex_3" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="DialogLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
