@@ -1,103 +1,78 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using DisplayColorUsing;
 
 namespace EasyToDo
 {
-	public partial class OutFileDataSet
+	public class OutFileDataSet
 	{
-		useXML uXml = new useXML();
-		Flags flags = new Flags();
+		private readonly DataStruct m_dataStruct = new DataStruct();
 
 		/// <summary>
-		/// ファイル保存メッセージ＆自動実行
+		///     ファイル保存メッセージ＆自動実行
 		/// </summary>
-		/// <param name="file_name"></param>
-		private void SaveFile( string file_name )
+		/// <param name="fileName">保存ファイル名</param>
+		private void SaveFile(string fileName)
 		{
-			MessageBox.Show(file_name.ToString() + "に保存しました。");
-			Process.Start( file_name.ToString() );
-
-
+			MessageBox.Show(fileName.ToString(CultureInfo.InvariantCulture) + "に保存しました。");
+			Process.Start(fileName.ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>
-		/// 選択データのタイトルをファイルに出力する。
+		///     選択データのタイトルをファイルに出力する。
 		/// </summary>
-		/// <param name="data">項目データ</param>
-		public void AllDataTitle( Datas data )
+		public void AllDataTitle()
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
+			SaveFileDialog sfd = new SaveFileDialog { FileName = "全データタイトル一覧.txt" };
 
-			flags = uXml.read();
-
-			sfd.FileName = "全データタイトル一覧.txt";
-			if( sfd.ShowDialog() == DialogResult.OK ){
-
-				StreamWriter ofs = new StreamWriter( sfd.FileName );
-				for( int i=0; i<data.data.Count; i++){
-
-					//フィルターに引っかかる物は表示しない
-					if (uXml.check(data.data[i].now_status, flags) != true)
-					{
-						continue;
-					}
-
-					//ofs.WriteLine("{0}\t:{1}", data.data[i].getStatus().ToString(), data.data[i].name.ToString());
-					ofs.WriteLine("{1}（期限：{0}）", data.data[i].getStatusTextForDisp().ToString(), data.data[i].name.ToString());
+			if( sfd.ShowDialog() == DialogResult.OK ) {
+				ColorStatus colorStatus;
+				StreamWriter ofs = new StreamWriter(sfd.FileName);
+				foreach( DataRowView dataRowView in this.m_dataStruct.TableView ) {
+					colorStatus = DisplayColor.GetColorStatusInt((int)dataRowView[ "status" ]);
+					if( colorStatus == DisplayColor.Date.ColorFlag ) ofs.WriteLine("{0}（期限：{1}）", dataRowView[ "name" ], dataRowView[ "limitDate" ]);
+					else ofs.WriteLine("{0}（期限：{1}）", dataRowView[ "name" ], DisplayColor.GetDispName(colorStatus));
 				}
 				ofs.Close();
-				
-				//MessageBox.Show(sfd.FileName.ToString()+"に保存しました。");
-				SaveFile(sfd.FileName.ToString());
 
+				this.SaveFile(sfd.FileName.ToString(CultureInfo.InvariantCulture));
 			}
-
 		}
 
 		/// <summary>
-		/// 選択データのタイトル及び内容を出力する。
-		/// タイトルのみは AllDataTitle を利用する。
+		///     選択データのタイトル及び内容を出力する。
+		///     タイトルのみは AllDataTitle を利用する。
 		/// </summary>
-		/// <param name="data">項目データ</param>
-		public void AllDatas( Datas data )
+		public void AllDatas()
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
+			SaveFileDialog sfd = new SaveFileDialog { FileName = "全データタイトル一覧.txt" };
 
-			flags = uXml.read();
-
-
-			sfd.FileName = "全データ一覧.txt";
-			if (sfd.ShowDialog() == DialogResult.OK)
-			{
-
+			if( sfd.ShowDialog() == DialogResult.OK ) {
+				ColorStatus colorStatus;
 				StreamWriter ofs = new StreamWriter(sfd.FileName);
-				for (int i = 0; i < data.data.Count; i++)
-				{
-					//フィルターに引っかかる物は表示しない
-					if (uXml.check(data.data[i].now_status, flags) != true)
-					{
-						continue;
-					}
 
-					//ofs.WriteLine("{0}\t:{1}", data.data[i].getStatus().ToString(), data.data[i].name.ToString());
-					ofs.Write("【{0}】【{1}】", data.data[i].getStatusTextForDisp().ToString(), data.data[i].name.ToString());
+				foreach( DataRowView dataRowView in this.m_dataStruct.TableView ) {
+					colorStatus = DisplayColor.GetColorStatusInt((int)dataRowView[ "status" ]);
+					ofs.Write("【{0}】【{1}】", DisplayColor.GetDispName(colorStatus), dataRowView[ "name" ]);
 					ofs.Write(Environment.NewLine);
-					ofs.Write("（作成日：{0}）", data.data[i].createDate.ToString());
-					ofs.Write("（期限：{0}）", data.data[i].limitDate.ToString());
-					ofs.Write("（終了日：{0}）", data.data[i].exitDate.ToString());
+					ofs.Write("（作成日：{0}）", dataRowView[ "createDate" ]);
+					if( colorStatus == DisplayColor.Date.ColorFlag ) ofs.Write("（期限：{0}）", dataRowView[ "limitDate" ]);
+					if( colorStatus == DisplayColor.Finish.ColorFlag ) ofs.Write("（終了日：{0}）", dataRowView[ "exitDate" ]);
 					ofs.Write(Environment.NewLine);
 					ofs.Write("【メモ】" + Environment.NewLine);
 
-					ofs.Write("\t{0}", data.data[i].memo.Replace(Environment.NewLine, Environment.NewLine + "\t").ToString());
+					ofs.Write("\t{0}",
+						( (string)dataRowView[ "memo" ] ).Replace(Environment.NewLine, Environment.NewLine + "\t")
+							.ToString(CultureInfo.InvariantCulture));
 					ofs.Write(Environment.NewLine);
 					ofs.Write(Environment.NewLine);
 				}
 				ofs.Close();
-				//MessageBox.Show(sfd.FileName.ToString() + "に保存しました。");
-				SaveFile(sfd.FileName.ToString());
-
+				this.SaveFile(sfd.FileName.ToString(CultureInfo.InvariantCulture));
 			}
 		}
 	}
